@@ -1,0 +1,36 @@
+spring:
+  main:
+    banner-mode: off
+
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    enabled: true
+
+app:
+  description: ${app.description}
+  version: ${app.version}
+  server:
+    url: ${app.server.url}
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  name: bank
+  description: ${app.description}

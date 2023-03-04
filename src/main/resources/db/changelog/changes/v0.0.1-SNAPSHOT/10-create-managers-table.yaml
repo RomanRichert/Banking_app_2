@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-managers-table
+      author: Roman Richert
+      changes:
+        - createTable:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: integer(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp on update current_timestamp

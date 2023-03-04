@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-clients-table
+      author: Roman Richert
+      changes:
+        - createTable:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  type: varchar(40)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: manager_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: integer(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tax_code
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp on update current_timestamp
+        - addForeignKeyConstraint:
+            constraintName: clients_fk0
+            baseTableName: clients
+            baseColumnNames: manager_id
+            referencedTableName: managers
+            referencedColumnNames: id

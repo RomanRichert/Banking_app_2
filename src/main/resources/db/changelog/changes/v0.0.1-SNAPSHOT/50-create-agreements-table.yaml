@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-agreements-table
+      author: Roman Richert
+      changes:
+        - createTable:
+            tableName: agreements
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: interest_rate
+                  type: decimal(6, 4)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: integer(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sum
+                  type: decimal(15, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp on update current_timestamp
+        - addForeignKeyConstraint:
+            constraintName: agreements_fk0
+            baseTableName: agreements
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: agreements_fk1
+            baseTableName: agreements
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id

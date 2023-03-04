@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transactions-table
+      author: Roman Richert
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: varchar(40)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: debit_account_id
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: credit_account_id
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: integer(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(12, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueDate: current_timestamp
+        - addForeignKeyConstraint:
+            constraintName: transactions_fk0
+            baseTableName: transactions
+            baseColumnNames: debit_account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: transactions_fk1
+            baseTableName: transactions
+            baseColumnNames: credit_account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
