@@ -6,9 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ManagerStatus {
-    ACTIVE(1),
-    PENDING(2),
-    REMOVED(3);
+
+    ACTIVE(0),
+    PENDING(1),
+    REMOVED(2);
 
     private final int value;
 }

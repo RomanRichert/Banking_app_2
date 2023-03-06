@@ -4,7 +4,8 @@ import com.richert.banking_app.entity.enums.AccountStatus;
 import com.richert.banking_app.entity.enums.AccountType;
 import com.richert.banking_app.entity.enums.Currencies;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,17 +15,16 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.ORDINAL;
+import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Account {
 
     @Id
@@ -32,8 +32,10 @@ public class Account {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",
             strategy = "com.richert.banking_app.generator.UuidTimeSequenceGenerator")
-    private UUID id;
+    private String id;
 
+    @NotBlank(message = "Name shouldn't be empty")
+    @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     @Column(name = "name")
     private String name;
 
@@ -45,16 +47,16 @@ public class Account {
     private AccountStatus status;
 
     @Column(name = "balance")
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.valueOf(50);
 
     @Column(name = "currency_code")
     private Currencies currency;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private Timestamp updatedAt = createdAt;
 
     @ManyToOne()
     @JoinColumn(name = "client_id",
@@ -78,5 +80,14 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(id, createdAt, client);
+    }
+
+    public Account(String name, AccountType type, AccountStatus status, BigDecimal balance, Currencies currency, Client client) {
+        this.name = name;
+        this.type = type;
+        this.status = status;
+        this.balance = balance;
+        this.currency = currency;
+        this.client = client;
     }
 }

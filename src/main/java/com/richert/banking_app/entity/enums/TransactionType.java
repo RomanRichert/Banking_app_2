@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TransactionType {
+
     NEW(1),
     PENDING(4),
     APPROVED(8);

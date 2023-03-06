@@ -3,7 +3,8 @@ package com.richert.banking_app.entity;
 import com.richert.banking_app.entity.enums.Currencies;
 import com.richert.banking_app.entity.enums.ProductStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +15,12 @@ import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@NoArgsConstructor
 @Table(name = "products")
 public class Product {
 
@@ -28,6 +29,8 @@ public class Product {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
+    @NotBlank(message = "Product name shouldn't be empty")
+    @Size(min = 1, max = 70, message = "Product name should be between 1 and 70 characters")
     @Column(name = "name")
     private String name;
 
@@ -40,13 +43,13 @@ public class Product {
     private Currencies currency;
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate;
+    private BigDecimal interestRate = BigDecimal.ZERO;
 
     @Column(name = "limit")
     private int limit;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
@@ -67,5 +70,12 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(name, manager, createdAt);
+    }
+
+    public Product(String name, ProductStatus status, Currencies currency, int limit) {
+        this.name = name;
+        this.status = status;
+        this.currency = currency;
+        this.limit = limit;
     }
 }
