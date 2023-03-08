@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ClientService {
 
-    List<ClientResponseDTO> getAllClients(String clientStatus);
+    List<ClientResponseDTO> getAllClientsByStatus(String clientStatus);
 }

@@ -1,6 +1,7 @@
 package com.richert.banking_app.mapper;
 
 import com.richert.banking_app.dto.ClientResponseDTO;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,11 +14,13 @@ import static com.richert.banking_app.util.EntityCreator.getClient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Test class for ClientMapper")
 class ClientMapperTest {
 
     ClientMapper clientMapper = new ClientMapperImpl();
 
     @Test
+    @DisplayName("Tests mapping of a Client to ClientResponseDTO. All fields except \"createdAt\" must match")
     void toDTO() {
         int i = 0;
         Field[] fields = getClientResponseDTO().getClass().getDeclaredFields();
@@ -32,6 +35,7 @@ class ClientMapperTest {
     }
 
     @Test
+    @DisplayName("Tests mapping of a List<Client> to List<ClientResponseDTO>")
     void clientsToClientDTOs() {
         List<ClientResponseDTO> dtos = List.of(getClientResponseDTO());
         List<ClientResponseDTO> afterMethod = clientMapper.clientsToClientDTOs(List.of(getClient()));

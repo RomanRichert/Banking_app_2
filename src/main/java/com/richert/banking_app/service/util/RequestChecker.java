@@ -8,8 +8,10 @@ import lombok.experimental.UtilityClass;
 public class RequestChecker {
 
     public static void checkClientStatus(String status) {
-        for (ClientStatus cs : ClientStatus.values()) {
-            if (status.equals(cs.name())) return;
+        if (status != null && !status.isBlank()) {
+            for (ClientStatus cs : ClientStatus.values()) {
+                if (status.equals(cs.name())) return;
+            }
         }
 
         throw new InvalidClientStatusException(status);

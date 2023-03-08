@@ -7,6 +7,7 @@ import com.richert.banking_app.exception.InvalidClientStatusException;
 import com.richert.banking_app.mapper.ClientMapper;
 import com.richert.banking_app.mapper.ClientMapperImpl;
 import com.richert.banking_app.repository.ClientRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,11 +19,11 @@ import java.util.List;
 
 import static com.richert.banking_app.util.DtoCreator.getClientResponseDTO;
 import static com.richert.banking_app.util.EntityCreator.getClient;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Test class for ClientServiceImpl")
 class ClientServiceImplTest {
 
     @Mock
@@ -35,6 +36,7 @@ class ClientServiceImplTest {
     ClientServiceImpl clientService;
 
     @Test
+    @DisplayName("Testing getAllClients()")
     void getAllClients() {
         List<ClientResponseDTO> response = List.of(getClientResponseDTO());
         List<Client> clients = List.of(getClient());
@@ -42,15 +44,12 @@ class ClientServiceImplTest {
 
         when(clientRepository.findByStatus(ClientStatus.valueOf(status))).thenReturn(clients);
         when(clientRepository.findByStatus(ClientStatus.ACTIVE)).thenReturn(List.of());
-        when(clientRepository.findAll()).thenReturn(clients);
 
-        assertEquals(response.get(0).getId(), clientService.getAllClients(status).get(0).getId(), "The ids in the responseDTOs should be equal");
-        assertEquals(response.get(0).getId(), clientService.getAllClients("PeNdInG").get(0).getId(), "The ids in the responseDTOs should be equal");
-        assertEquals(List.of(), clientService.getAllClients(ClientStatus.ACTIVE.toString()), "There should come an empty list");
-        assertEquals(response.get(0).getId(), clientService.getAllClients(null).get(0).getId(), "The ids in the responseDTOs should be equal");
-        assertThrows(InvalidClientStatusException.class, () -> clientService.getAllClients("Some stuff"), "InvalidClientStatusException should be thrown");
+        assertEquals(response.get(0).getId(), clientService.getAllClientsByStatus(status).get(0).getId(), "The ids in the responseDTOs should be equal");
+        assertEquals(response.get(0).getId(), clientService.getAllClientsByStatus("PeNdInG").get(0).getId(), "The ids in the responseDTOs should be equal");
+        assertEquals(List.of(), clientService.getAllClientsByStatus(ClientStatus.ACTIVE.toString()), "There should come an empty list");
+        assertThrows(InvalidClientStatusException.class, () -> clientService.getAllClientsByStatus("Some stuff"), "InvalidClientStatusException should be thrown");
 
         verify(clientRepository, times(3)).findByStatus(any());
-        verify(clientRepository).findAll();
     }
 }

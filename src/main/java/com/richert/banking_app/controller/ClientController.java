@@ -25,14 +25,14 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    @GetMapping()
     @ResponseStatus(OK)
-    @Operation(summary = "Request for all clients", description = "Getting all clients with given status. Getting all clients if no params entered")
+    @GetMapping("/status/{status}")
+    @Operation(summary = "Request for all clients by status", description = "Getting all clients with given status")
     @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
             @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = ClientResponseDTO.class)))
     })
-    public List<ClientResponseDTO> getAllClients(@RequestParam(required = false) String status) {
-        return clientService.getAllClients(status);
+    public List<ClientResponseDTO> getAllClientsByStatus(@PathVariable String status) {
+        return clientService.getAllClientsByStatus(status);
     }
 }

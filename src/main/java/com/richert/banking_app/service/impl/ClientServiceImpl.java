@@ -21,14 +21,9 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public List<ClientResponseDTO> getAllClients(String clientStatus) {
-        if (clientStatus != null && !clientStatus.isBlank()) {
-            String status = clientStatus.toUpperCase();
-            checkClientStatus(status);
-            return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(ClientStatus.valueOf(status)));
-        }
-
-
-        return clientMapper.clientsToClientDTOs(clientRepository.findAll());
+    public List<ClientResponseDTO> getAllClientsByStatus(String clientStatus) {
+        String status = clientStatus.toUpperCase();
+        checkClientStatus(status);
+        return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(ClientStatus.valueOf(status)));
     }
 }
