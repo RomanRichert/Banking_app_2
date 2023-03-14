@@ -7,4 +7,6 @@ import java.util.List;
 public interface ClientService {
 
     List<ClientResponseDTO> getAllClientsByStatus(String clientStatus);
+
+    List<ClientResponseDTO> getAllClientsWhereBalanceMoreThan(double amount);
 }

@@ -8,6 +8,7 @@ import com.richert.banking_app.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.richert.banking_app.service.util.RequestChecker.checkClientStatus;
@@ -25,5 +26,10 @@ public class ClientServiceImpl implements ClientService {
         String status = clientStatus.toUpperCase();
         checkClientStatus(status);
         return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(ClientStatus.valueOf(status)));
+    }
+
+    @Override
+    public List<ClientResponseDTO> getAllClientsWhereBalanceMoreThan(double amount) {
+        return clientMapper.clientsToClientDTOs(clientRepository.findByAccountsBalanceGreaterThan(BigDecimal.valueOf(amount)));
     }
 }

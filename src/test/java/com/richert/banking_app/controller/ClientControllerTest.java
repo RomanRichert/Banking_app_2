@@ -25,9 +25,18 @@ class ClientControllerTest {
     private ClientService clientService;
 
     @Test
-    @DisplayName("Makes an HTTP-request to /clients. Expected HTTP-status - OK")
-    void getAllClients() throws Exception {
+    @DisplayName("Makes an HTTP-request to /clients/status/pending . Expected HTTP-status - OK")
+    void getAllClientsByStatus() throws Exception {
         mvc.perform(get("/clients/status/pending")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Makes an HTTP-request to /clients/accounts?amount=200 . Expected HTTP-status - OK")
+    void getAllClientsWhereBalanceMoreThan() throws Exception {
+        mvc.perform(get("/clients/accounts")
+                        .param("amount", "200")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

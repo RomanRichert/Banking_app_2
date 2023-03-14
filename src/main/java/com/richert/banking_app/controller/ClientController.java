@@ -35,4 +35,15 @@ public class ClientController {
     public List<ClientResponseDTO> getAllClientsByStatus(@PathVariable String status) {
         return clientService.getAllClientsByStatus(status);
     }
+
+    @ResponseStatus(OK)
+    @GetMapping("/accounts")
+    @Operation(summary = "Request for all clients with balance more than requested parameter", description = "Getting all clients where balance more than requested parameter")
+    @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
+            @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ClientResponseDTO.class)))
+    })
+    public List<ClientResponseDTO> getAllClientsWhereBalanceMoreThan(@RequestParam double amount) {
+        return clientService.getAllClientsWhereBalanceMoreThan(amount);
+    }
 }
