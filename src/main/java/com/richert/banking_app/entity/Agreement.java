@@ -2,7 +2,6 @@ package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.AccountProductStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,13 +12,13 @@ import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "agreements")
+@NoArgsConstructor
 public class Agreement {
 
     @Id
@@ -35,10 +34,10 @@ public class Agreement {
     private BigDecimal interestRate;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private Timestamp updatedAt = createdAt;
 
     @ManyToOne()
     @JoinColumn(name = "account_id",
@@ -61,5 +60,12 @@ public class Agreement {
     @Override
     public int hashCode() {
         return Objects.hash(id, createdAt, account, product);
+    }
+
+    public Agreement(AccountProductStatus status, BigDecimal interestRate, Account account, Product product) {
+        this.status = status;
+        this.interestRate = interestRate;
+        this.account = account;
+        this.product = product;
     }
 }

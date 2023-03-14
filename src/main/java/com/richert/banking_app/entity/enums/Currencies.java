@@ -6,10 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Currencies {
-    EUR(1),
-    USD(2),
-    UAH(3),
-    RUB(4);
+
+    EUR(0),
+    USD(1),
+    UAH(2),
+    RUB(3);
 
     private final int value;
 }

@@ -16,6 +16,7 @@ import static java.lang.System.currentTimeMillis;
 public class UuidTimeSequenceGenerator implements IdentifierGenerator {
 
     private static final String NEXT_VAL_QUERY = "SELECT nextval('seq_for_uuid_generator');";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override

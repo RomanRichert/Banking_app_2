@@ -2,7 +2,6 @@ package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,16 +10,15 @@ import org.hibernate.annotations.GenericGenerator;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.UUID;
 
 import static jakarta.persistence.EnumType.ORDINAL;
+import static java.lang.System.currentTimeMillis;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "transactions")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Transaction {
 
     @Id
@@ -28,7 +26,7 @@ public class Transaction {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",
             strategy = "com.richert.banking_app.generator.UuidTimeSequenceGenerator")
-    private UUID id;
+    private String id;
 
     @Enumerated(ORDINAL)
     @Column(name = "type")
@@ -41,7 +39,7 @@ public class Transaction {
     private String description;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
 
     @ManyToOne()
     @JoinColumn(name = "debit_account_id",
@@ -64,5 +62,13 @@ public class Transaction {
     @Override
     public int hashCode() {
         return Objects.hash(createdAt, debitAccountId, creditAccountId, id);
+    }
+
+    public Transaction(TransactionType type, BigDecimal amount, String description, Account debitAccountId, Account creditAccountId) {
+        this.type = type;
+        this.amount = amount;
+        this.description = description;
+        this.debitAccountId = debitAccountId;
+        this.creditAccountId = creditAccountId;
     }
 }
