@@ -36,8 +36,8 @@ class ClientServiceImplTest {
     ClientServiceImpl clientService;
 
     @Test
-    @DisplayName("Testing getAllClients()")
-    void getAllClients() {
+    @DisplayName("Testing getAllClientsByStatus()")
+    void getAllClientsByStatus() {
         List<ClientResponseDTO> response = List.of(getClientResponseDTO());
         List<Client> clients = List.of(getClient());
         String status = ClientStatus.PENDING.toString();
@@ -51,5 +51,20 @@ class ClientServiceImplTest {
         assertThrows(InvalidClientStatusException.class, () -> clientService.getAllClientsByStatus("Some stuff"), "InvalidClientStatusException should be thrown");
 
         verify(clientRepository, times(3)).findByStatus(any());
+    }
+
+    @Test
+    @DisplayName("Testing getAllClientsWhereBalanceMoreThan()")
+    void getAllClientsWhereBalanceMoreThan() {
+        List<ClientResponseDTO> response = List.of(getClientResponseDTO());
+        List<Client> clients = List.of(getClient());
+
+        when(clientRepository.findByAccountsBalanceGreaterThan(any())).thenReturn(clients);
+
+        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(0).get(0).getId());
+        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(800).get(0).getId());
+        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(-30).get(0).getId());
+
+        verify(clientRepository, times(3)).findByAccountsBalanceGreaterThan(any());
     }
 }
