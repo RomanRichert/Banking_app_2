@@ -7,10 +7,11 @@ import lombok.Getter;
 @Getter
 public enum Currencies {
 
-    EUR(0),
-    USD(1),
-    UAH(2),
-    RUB(3);
+    NEW(0),
+    EUR(1),
+    USD(2),
+    UAH(3),
+    RUB(4);
 
     private final int value;
 }

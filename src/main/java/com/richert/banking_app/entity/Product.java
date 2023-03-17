@@ -14,8 +14,8 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
@@ -43,18 +43,18 @@ public class Product {
     private Currencies currency;
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate = BigDecimal.ZERO;
+    private BigDecimal interestRate;
 
     @Column(name = "limit")
     private int limit;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;

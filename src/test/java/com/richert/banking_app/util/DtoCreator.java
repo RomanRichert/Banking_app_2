@@ -4,12 +4,14 @@ import com.richert.banking_app.dto.ClientResponseDTO;
 import com.richert.banking_app.entity.Client;
 import lombok.experimental.UtilityClass;
 
+import java.util.LinkedHashSet;
+
 import static com.richert.banking_app.util.EntityCreator.getClient;
 
 @UtilityClass
 public class DtoCreator {
 
-    public static ClientResponseDTO getClientResponseDTO(){
+    public static ClientResponseDTO getClientResponseDTO() {
         Client client = getClient();
         return new ClientResponseDTO(
                 client.getId(),
@@ -20,8 +22,9 @@ public class DtoCreator {
                 client.getEmail(),
                 client.getAddress(),
                 client.getPhone(),
-                client.getCreatedAt().toString(),
-                client.getManager()
+                null,
+                client.getManager().toString(),
+                new LinkedHashSet<>()
         );
     }
 }

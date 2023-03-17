@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
@@ -34,17 +34,17 @@ public class Agreement {
     private BigDecimal interestRate;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt = createdAt;
+    private Timestamp updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id",
             referencedColumnName = "id")
     private Account account;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "product_id",
             referencedColumnName = "id")
     private Product product;

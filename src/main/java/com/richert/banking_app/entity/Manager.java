@@ -4,14 +4,16 @@ import com.richert.banking_app.entity.enums.ManagerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
@@ -41,7 +43,7 @@ public class Manager {
     private ManagerStatus status;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;

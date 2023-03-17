@@ -2,6 +2,8 @@ package com.richert.banking_app.dto;
 
 import lombok.Value;
 
+import java.util.Set;
+
 @Value
 public class ClientResponseDTO {
 
@@ -24,4 +26,6 @@ public class ClientResponseDTO {
     String createdAt;
 
     String manager;
+
+    Set<String> accounts;
 }

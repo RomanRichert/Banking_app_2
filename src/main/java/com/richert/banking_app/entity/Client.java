@@ -17,7 +17,7 @@ import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.ORDINAL;
-import static java.lang.System.currentTimeMillis;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -70,17 +70,17 @@ public class Client {
     private String phone;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt = createdAt;
+    private Timestamp updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(cascade = ALL, mappedBy = "client")
+    @OneToMany(cascade = ALL, mappedBy = "client", fetch = LAZY)
     private Set<Account> accounts = new LinkedHashSet<>();
 
     @Override
@@ -94,20 +94,6 @@ public class Client {
     @Override
     public int hashCode() {
         return Objects.hash(id, email);
-    }
-
-    public Set<String> getAccounts() {
-        Set<String> set = new LinkedHashSet<>();
-
-        for (Account a : accounts) {
-            set.add(a.toString());
-        }
-
-        return set;
-    }
-
-    public String getManager() {
-        return manager.toString();
     }
 
     public Client(ClientStatus status, String taxCode, String firstName, String lastName, String email, String address, String phone, Manager manager) {
