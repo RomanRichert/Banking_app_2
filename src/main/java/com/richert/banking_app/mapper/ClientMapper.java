@@ -4,9 +4,7 @@ import com.richert.banking_app.dto.ClientRequestDTO;
 import com.richert.banking_app.dto.ClientResponseDTO;
 import com.richert.banking_app.entity.Client;
 import com.richert.banking_app.repository.ManagerRepository;
-import com.richert.banking_app.service.impl.ManagerServiceImpl;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,17 +12,22 @@ import java.util.List;
 import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 
 @Mapper(componentModel = "spring",
-        uses = {AccountMapper.class},
+        uses = {AccountMapper.class, ManagerMapper.class},
         injectionStrategy = CONSTRUCTOR,
-        imports = {Timestamp.class, ManagerRepository.class, ManagerServiceImpl.class})
+        imports = {Timestamp.class})
 public interface ClientMapper {
 
     @Mapping(source = "manager.id", target = "manager")
     ClientResponseDTO toDTO(Client client);
 
+    @Mapping(target = "manager", ignore = true)
     @Mapping(target = "createdAt", expression = "java(new Timestamp(System.currentTimeMillis()))")
-    @Mapping(target = "manager", expression = "java(ManagerServiceImpl.findManager(clientRequestDTO))")
-    Client toEntity(ClientRequestDTO clientRequestDTO);
+    Client toEntity(ClientRequestDTO clientRequestDTO, @Context ManagerRepository managerRepository);
 
     List<ClientResponseDTO> clientsToClientDTOs(List<Client> clients);
+
+    @AfterMapping
+    default void getManagerForClient(@MappingTarget Client target, ClientRequestDTO clientRequestDTO, @Context ManagerRepository managerRepository) {
+        target.setManager(managerRepository.findById(clientRequestDTO.getManager()).orElse(null));
+    }
 }

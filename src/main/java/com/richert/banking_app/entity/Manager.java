@@ -28,14 +28,14 @@ public class Manager {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
+    @Column(name = "first_name")
     @NotBlank(message = "First name shouldn't be empty")
     @Size(min = 2, max = 50, message = "First name should be between 2 and 50 characters")
-    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     @NotBlank(message = "First name shouldn't be empty")
     @Size(min = 2, max = 50, message = "Last name should be between 2 and 50 characters")
-    @Column(name = "last_name")
     private String lastName;
 
     @Enumerated(ORDINAL)

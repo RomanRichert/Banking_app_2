@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Currencies {
+public enum Currency {
 
-    NEW(0),
+    CNY(0),
     EUR(1),
     USD(2),
     UAH(3),

@@ -2,7 +2,7 @@ package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.AccountStatus;
 import com.richert.banking_app.entity.enums.AccountType;
-import com.richert.banking_app.entity.enums.Currencies;
+import com.richert.banking_app.entity.enums.Currency;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -51,7 +51,7 @@ public class Account {
     private BigDecimal balance;
 
     @Column(name = "currency_code")
-    private Currencies currency;
+    private Currency currency;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -86,7 +86,7 @@ public class Account {
         return Objects.hash(id, createdAt, client);
     }
 
-    public Account(String name, AccountType type, AccountStatus status, Currencies currency, Client client) {
+    public Account(String name, AccountType type, AccountStatus status, Currency currency, Client client) {
         this.name = name;
         this.type = type;
         this.status = status;

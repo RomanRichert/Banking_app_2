@@ -7,7 +7,7 @@ public class AgreementDTO {
 
     int id;
 
-    String accountProductStatus;
+    String status;
 
     String interestRate;
 

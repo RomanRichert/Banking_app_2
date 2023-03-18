@@ -83,6 +83,10 @@ public class Client {
     @OneToMany(cascade = ALL, mappedBy = "client", fetch = LAZY)
     private Set<Account> accounts = new LinkedHashSet<>();
 
+    public void addAccount(Account account){
+        accounts.add(account);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
