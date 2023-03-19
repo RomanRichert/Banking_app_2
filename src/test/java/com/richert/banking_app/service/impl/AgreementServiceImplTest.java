@@ -41,10 +41,10 @@ class AgreementServiceImplTest {
         List<AgreementDTO> response = List.of(getAgreementDTO());
         List<Agreement> agreements = List.of(getAgreement());
 
-        when(agreementRepository.findByAccountId(any())).thenReturn(agreements);
+        when(agreementRepository.findByAccountClientId(any())).thenReturn(agreements);
 
         assertEquals(response, agreementService.getAgreementsByClientsId(any()), "Lists should be equals");
 
-        verify(agreementRepository).findByAccountId(any());
+        verify(agreementRepository).findByAccountClientId(any());
     }
 }
