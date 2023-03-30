@@ -217,7 +217,7 @@
                         <exclude>com/**/exception/**</exclude>
                         <exclude>com/**/BankingAppApplication.class</exclude>
                     </excludes>
-                    <outputDirectory>${jacoco-maven-plugin.version}</outputDirectory>
+                    <outputDirectory>target/coverage-reports/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

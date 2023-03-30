@@ -31,7 +31,7 @@ class ClientControllerTest {
     @SneakyThrows
     @DisplayName("Makes an HTTP-request to /clients/status/pending . Expected HTTP-status - OK")
     void getAllClientsByStatus() {
-        mvc.perform(get("/clients/status/pending")
+        mvc.perform(get("/clients/pending")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
