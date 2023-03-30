@@ -1,6 +1,6 @@
 package com.richert.banking_app.entity;
 
-import com.richert.banking_app.entity.enums.Currencies;
+import com.richert.banking_app.entity.enums.Currency;
 import com.richert.banking_app.entity.enums.ProductStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -14,8 +14,8 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
@@ -40,21 +40,21 @@ public class Product {
 
     @Enumerated(ORDINAL)
     @Column(name = "currency_code")
-    private Currencies currency;
+    private Currency currency;
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate = BigDecimal.ZERO;
+    private BigDecimal interestRate;
 
     @Column(name = "limit")
     private int limit;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;
@@ -72,7 +72,7 @@ public class Product {
         return Objects.hash(name, manager, createdAt);
     }
 
-    public Product(String name, ProductStatus status, Currencies currency, int limit) {
+    public Product(String name, ProductStatus status, Currency currency, int limit) {
         this.name = name;
         this.status = status;
         this.currency = currency;

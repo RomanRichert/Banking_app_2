@@ -4,14 +4,16 @@ import com.richert.banking_app.entity.enums.ManagerStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.System.currentTimeMillis;
 
 @Getter
 @Setter
@@ -26,14 +28,14 @@ public class Manager {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
+    @Column(name = "first_name")
     @NotBlank(message = "First name shouldn't be empty")
     @Size(min = 2, max = 50, message = "First name should be between 2 and 50 characters")
-    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     @NotBlank(message = "First name shouldn't be empty")
     @Size(min = 2, max = 50, message = "Last name should be between 2 and 50 characters")
-    @Column(name = "last_name")
     private String lastName;
 
     @Enumerated(ORDINAL)
@@ -41,7 +43,7 @@ public class Manager {
     private ManagerStatus status;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;

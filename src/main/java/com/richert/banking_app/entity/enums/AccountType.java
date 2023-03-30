@@ -7,9 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AccountType {
 
-    CREDIT(0),
-    DEPOSIT(1),
-    CURRENT(2);
+    NEW(0),
+    CREDIT(1),
+    DEPOSIT(2),
+    CURRENT(3);
 
     private final int value;
 }

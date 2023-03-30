@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import static jakarta.persistence.EnumType.ORDINAL;
-import static java.lang.System.currentTimeMillis;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Setter
 @Getter
@@ -39,36 +39,36 @@ public class Transaction {
     private String description;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "debit_account_id",
             referencedColumnName = "id")
-    private Account debitAccountId;
+    private Account debitAccount;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "credit_account_id",
             referencedColumnName = "id")
-    private Account creditAccountId;
+    private Account creditAccount;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return createdAt == that.createdAt && Objects.equals(debitAccountId, that.debitAccountId) && Objects.equals(creditAccountId, that.creditAccountId);
+        return createdAt == that.createdAt && Objects.equals(debitAccount, that.debitAccount) && Objects.equals(creditAccount, that.creditAccount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(createdAt, debitAccountId, creditAccountId, id);
+        return Objects.hash(createdAt, debitAccount, creditAccount, id);
     }
 
-    public Transaction(TransactionType type, BigDecimal amount, String description, Account debitAccountId, Account creditAccountId) {
+    public Transaction(TransactionType type, BigDecimal amount, String description, Account debitAccount, Account creditAccount) {
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.debitAccountId = debitAccountId;
-        this.creditAccountId = creditAccountId;
+        this.debitAccount = debitAccount;
+        this.creditAccount = creditAccount;
     }
 }

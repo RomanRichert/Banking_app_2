@@ -7,9 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ProductStatus {
 
-    ACTIVE(0),
-    PENDING(1),
-    REMOVED(2);
+    NEW(0),
+    ACTIVE(1),
+    PENDING(2),
+    REMOVED(3);
 
     private final int value;
 }

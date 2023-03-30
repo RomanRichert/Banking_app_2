@@ -1,6 +1,6 @@
 package com.richert.banking_app.controller;
 
-import com.richert.banking_app.service.ClientService;
+import com.richert.banking_app.service.AgreementService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
@@ -17,31 +17,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
-@WebMvcTest(ClientController.class)
-@DisplayName("Test class for ClientController")
-class ClientControllerTest {
+@WebMvcTest(AgreementController.class)
+@DisplayName("Test class for AgreementController")
+class AgreementControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private ClientService clientService;
+    private AgreementService agreementService;
 
     @Test
     @SneakyThrows
-    @DisplayName("Makes an HTTP-request to /clients/status/pending . Expected HTTP-status - OK")
-    void getAllClientsByStatus() {
-        mvc.perform(get("/clients/status/pending")
-                        .accept(APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @SneakyThrows
-    @DisplayName("Makes an HTTP-request to /clients/accounts?amount=200 . Expected HTTP-status - OK")
-    void getAllClientsWhereBalanceMoreThan() {
-        mvc.perform(get("/clients/accounts")
-                        .param("amount", "200")
+    @DisplayName("Makes an HTTP-request to /agreements?clientId=*any* . Expected HTTP-status - OK")
+    void findAgreementsWhereClientIdIs() {
+        mvc.perform(get("/agreements")
+                        .param("clientId", "200")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

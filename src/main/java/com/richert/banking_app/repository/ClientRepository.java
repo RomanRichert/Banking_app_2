@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, UUID> {
+
     List<Client> findByAccountsBalanceGreaterThan(@NonNull BigDecimal balance);
 
     List<Client> findByStatus(ClientStatus status);

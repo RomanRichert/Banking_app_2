@@ -2,7 +2,7 @@ package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.AccountStatus;
 import com.richert.banking_app.entity.enums.AccountType;
-import com.richert.banking_app.entity.enums.Currencies;
+import com.richert.banking_app.entity.enums.Currency;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,12 +13,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.ORDINAL;
-import static java.lang.System.currentTimeMillis;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -47,27 +48,30 @@ public class Account {
     private AccountStatus status;
 
     @Column(name = "balance")
-    private BigDecimal balance = BigDecimal.valueOf(50);
+    private BigDecimal balance;
 
     @Column(name = "currency_code")
-    private Currencies currency;
+    private Currency currency;
 
     @Column(name = "created_at")
-    private final Timestamp createdAt = new Timestamp(currentTimeMillis());
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt = createdAt;
+    private Timestamp updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "client_id",
             referencedColumnName = "id")
     private Client client;
 
-    @OneToMany(cascade = ALL, mappedBy = "debitAccountId")
-    private Set<Transaction> debitTransactions;
+    @OneToMany(cascade = ALL, mappedBy = "account", fetch = LAZY)
+    private Set<Agreement> agreements = new LinkedHashSet<>();
 
-    @OneToMany(cascade = ALL, mappedBy = "creditAccountId")
-    private Set<Transaction> creditTransactions;
+    @OneToMany(cascade = ALL, mappedBy = "debitAccount", fetch = LAZY)
+    private Set<Transaction> debitTransactions = new LinkedHashSet<>();
+
+    @OneToMany(cascade = ALL, mappedBy = "creditAccount", fetch = LAZY)
+    private Set<Transaction> creditTransactions = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -82,11 +86,10 @@ public class Account {
         return Objects.hash(id, createdAt, client);
     }
 
-    public Account(String name, AccountType type, AccountStatus status, BigDecimal balance, Currencies currency, Client client) {
+    public Account(String name, AccountType type, AccountStatus status, Currency currency, Client client) {
         this.name = name;
         this.type = type;
         this.status = status;
-        this.balance = balance;
         this.currency = currency;
         this.client = client;
     }

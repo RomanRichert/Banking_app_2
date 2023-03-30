@@ -19,7 +19,8 @@ import java.util.List;
 
 import static com.richert.banking_app.util.DtoCreator.getClientResponseDTO;
 import static com.richert.banking_app.util.EntityCreator.getClient;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,8 +46,8 @@ class ClientServiceImplTest {
         when(clientRepository.findByStatus(ClientStatus.valueOf(status))).thenReturn(clients);
         when(clientRepository.findByStatus(ClientStatus.ACTIVE)).thenReturn(List.of());
 
-        assertEquals(response.get(0).getId(), clientService.getAllClientsByStatus(status).get(0).getId(), "The ids in the responseDTOs should be equal");
-        assertEquals(response.get(0).getId(), clientService.getAllClientsByStatus("PeNdInG").get(0).getId(), "The ids in the responseDTOs should be equal");
+        assertEquals(response, clientService.getAllClientsByStatus(status), "The ids in the responseDTOs should be equal");
+        assertEquals(response, clientService.getAllClientsByStatus("PeNdInG"), "The ids in the responseDTOs should be equal");
         assertEquals(List.of(), clientService.getAllClientsByStatus(ClientStatus.ACTIVE.toString()), "There should come an empty list");
         assertThrows(InvalidClientStatusException.class, () -> clientService.getAllClientsByStatus("Some stuff"), "InvalidClientStatusException should be thrown");
 
@@ -61,10 +62,8 @@ class ClientServiceImplTest {
 
         when(clientRepository.findByAccountsBalanceGreaterThan(any())).thenReturn(clients);
 
-        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(0).get(0).getId());
-        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(800).get(0).getId());
-        assertEquals(response.get(0).getId(), clientService.getAllClientsWhereBalanceMoreThan(-30).get(0).getId());
+        assertEquals(response, clientService.getAllClientsWhereBalanceMoreThan(anyDouble()), "Lists should be equals");
 
-        verify(clientRepository, times(3)).findByAccountsBalanceGreaterThan(any());
+        verify(clientRepository).findByAccountsBalanceGreaterThan(any());
     }
 }

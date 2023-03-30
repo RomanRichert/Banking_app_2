@@ -7,10 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AccountStatus {
 
-    ACTIVE(0),
-    PENDING(1),
-    BLOCKED(2),
-    REMOVED(3);
+    NEW(0),
+    ACTIVE(1),
+    PENDING(2),
+    BLOCKED(3),
+    REMOVED(4);
 
     private final int value;
 }

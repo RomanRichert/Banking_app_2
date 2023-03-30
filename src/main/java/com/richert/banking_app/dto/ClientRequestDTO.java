@@ -1,7 +1,6 @@
 package com.richert.banking_app.dto;
 
 import lombok.Value;
-import java.util.Set;
 
 @Value
 public class ClientRequestDTO {
@@ -18,5 +17,5 @@ public class ClientRequestDTO {
 
     String phone;
 
-    Set<String> accounts;
+    int manager;
 }
