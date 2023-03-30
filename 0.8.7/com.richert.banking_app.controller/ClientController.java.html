@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Banking_App</a> &gt; <a href="index.source.html" class="el_package">com.richert.banking_app.controller</a> &gt; <span class="el_source">ClientController.java</span></div><h1>ClientController.java</h1><pre class="source lang-java linenums">package com.richert.banking_app.controller;
+
+import com.richert.banking_app.dto.ClientResponseDTO;
+import com.richert.banking_app.service.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
+
+@Validated
+@RestController
+<span class="fc" id="L21">@RequiredArgsConstructor</span>
+@RequestMapping(&quot;/clients&quot;)
+@Tag(name = &quot;Controller for managing clients&quot;)
+public class ClientController {
+
+    private final ClientService clientService;
+
+    @ResponseStatus(OK)
+    @GetMapping(&quot;/status/{status}&quot;)
+    @Operation(summary = &quot;Request for all clients by status&quot;, description = &quot;Getting all clients with given status&quot;)
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successfully returned list of clients&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    array = @ArraySchema(schema = @Schema(implementation = ClientResponseDTO.class)))
+    })
+    public List&lt;ClientResponseDTO&gt; getAllClientsByStatus(@PathVariable String status) {
+<span class="fc" id="L36">        return clientService.getAllClientsByStatus(status);</span>
+    }
+
+    @ResponseStatus(OK)
+    @GetMapping(&quot;/accounts&quot;)
+    @Operation(summary = &quot;Request for all clients with balance more than requested parameter&quot;, description = &quot;Getting all clients where balance more than requested parameter&quot;)
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successfully returned list of clients&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    array = @ArraySchema(schema = @Schema(implementation = ClientResponseDTO.class)))
+    })
+    public List&lt;ClientResponseDTO&gt; getAllClientsWhereBalanceMoreThan(@RequestParam double amount) {
+<span class="fc" id="L47">        return clientService.getAllClientsWhereBalanceMoreThan(amount);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

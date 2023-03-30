@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgreementMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Banking_App</a> &gt; <a href="index.source.html" class="el_package">com.richert.banking_app.mapper</a> &gt; <span class="el_source">AgreementMapperImpl.java</span></div><h1>AgreementMapperImpl.java</h1><pre class="source lang-java linenums">package com.richert.banking_app.mapper;
+
+import com.richert.banking_app.dto.AgreementDTO;
+import com.richert.banking_app.entity.Account;
+import com.richert.banking_app.entity.Agreement;
+import com.richert.banking_app.entity.Product;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+    date = &quot;2023-03-30T14:45:15+0200&quot;,
+    comments = &quot;version: 1.5.3.Final, compiler: javac, environment: Java 19.0.2 (Oracle Corporation)&quot;
+)
+@Component
+public class AgreementMapperImpl implements AgreementMapper {
+
+    private final DatatypeFactory datatypeFactory;
+
+<span class="fc" id="L28">    public AgreementMapperImpl() {</span>
+        try {
+<span class="fc" id="L30">            datatypeFactory = DatatypeFactory.newInstance();</span>
+        }
+<span class="nc" id="L32">        catch ( DatatypeConfigurationException ex ) {</span>
+<span class="nc" id="L33">            throw new RuntimeException( ex );</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public AgreementDTO toDTO(Agreement agreement) {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if ( agreement == null ) {</span>
+<span class="nc" id="L40">            return null;</span>
+        }
+
+<span class="fc" id="L43">        String account = null;</span>
+<span class="fc" id="L44">        String product = null;</span>
+<span class="fc" id="L45">        int id = 0;</span>
+<span class="fc" id="L46">        String status = null;</span>
+<span class="fc" id="L47">        String interestRate = null;</span>
+<span class="fc" id="L48">        String createdAt = null;</span>
+<span class="fc" id="L49">        String updatedAt = null;</span>
+
+<span class="fc" id="L51">        account = agreementAccountId( agreement );</span>
+<span class="fc" id="L52">        product = agreementProductName( agreement );</span>
+<span class="fc" id="L53">        id = agreement.getId();</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if ( agreement.getStatus() != null ) {</span>
+<span class="fc" id="L55">            status = agreement.getStatus().name();</span>
+        }
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if ( agreement.getInterestRate() != null ) {</span>
+<span class="fc" id="L58">            interestRate = agreement.getInterestRate().toString();</span>
+        }
+<span class="fc" id="L60">        createdAt = xmlGregorianCalendarToString( dateToXmlGregorianCalendar( agreement.getCreatedAt() ), null );</span>
+<span class="fc" id="L61">        updatedAt = xmlGregorianCalendarToString( dateToXmlGregorianCalendar( agreement.getUpdatedAt() ), null );</span>
+
+<span class="fc" id="L63">        AgreementDTO agreementDTO = new AgreementDTO( id, status, interestRate, createdAt, updatedAt, account, product );</span>
+
+<span class="fc" id="L65">        return agreementDTO;</span>
+    }
+
+    @Override
+    public List&lt;AgreementDTO&gt; agreementsToAgreementDTOs(List&lt;Agreement&gt; agreements) {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if ( agreements == null ) {</span>
+<span class="nc" id="L71">            return null;</span>
+        }
+
+<span class="fc" id="L74">        List&lt;AgreementDTO&gt; list = new ArrayList&lt;AgreementDTO&gt;( agreements.size() );</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for ( Agreement agreement : agreements ) {</span>
+<span class="fc" id="L76">            list.add( toDTO( agreement ) );</span>
+<span class="fc" id="L77">        }</span>
+
+<span class="fc" id="L79">        return list;</span>
+    }
+
+    private String xmlGregorianCalendarToString( XMLGregorianCalendar xcal, String dateFormat ) {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if ( xcal == null ) {</span>
+<span class="fc" id="L84">            return null;</span>
+        }
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (dateFormat == null ) {</span>
+<span class="nc" id="L88">            return xcal.toString();</span>
+        }
+        else {
+<span class="nc" id="L91">            Date d = xcal.toGregorianCalendar().getTime();</span>
+<span class="nc" id="L92">            SimpleDateFormat sdf = new SimpleDateFormat( dateFormat );</span>
+<span class="nc" id="L93">            return sdf.format( d );</span>
+        }
+    }
+
+    private XMLGregorianCalendar dateToXmlGregorianCalendar( Date date ) {
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if ( date == null ) {</span>
+<span class="fc" id="L99">            return null;</span>
+        }
+
+<span class="nc" id="L102">        GregorianCalendar c = new GregorianCalendar();</span>
+<span class="nc" id="L103">        c.setTime( date );</span>
+<span class="nc" id="L104">        return datatypeFactory.newXMLGregorianCalendar( c );</span>
+    }
+
+    private String agreementAccountId(Agreement agreement) {
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if ( agreement == null ) {</span>
+<span class="nc" id="L109">            return null;</span>
+        }
+<span class="fc" id="L111">        Account account = agreement.getAccount();</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if ( account == null ) {</span>
+<span class="nc" id="L113">            return null;</span>
+        }
+<span class="fc" id="L115">        String id = account.getId();</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if ( id == null ) {</span>
+<span class="fc" id="L117">            return null;</span>
+        }
+<span class="nc" id="L119">        return id;</span>
+    }
+
+    private String agreementProductName(Agreement agreement) {
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if ( agreement == null ) {</span>
+<span class="nc" id="L124">            return null;</span>
+        }
+<span class="fc" id="L126">        Product product = agreement.getProduct();</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if ( product == null ) {</span>
+<span class="nc" id="L128">            return null;</span>
+        }
+<span class="fc" id="L130">        String name = product.getName();</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if ( name == null ) {</span>
+<span class="nc" id="L132">            return null;</span>
+        }
+<span class="fc" id="L134">        return name;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

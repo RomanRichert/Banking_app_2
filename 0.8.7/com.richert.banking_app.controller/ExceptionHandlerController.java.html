@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExceptionHandlerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Banking_App</a> &gt; <a href="index.source.html" class="el_package">com.richert.banking_app.controller</a> &gt; <span class="el_source">ExceptionHandlerController.java</span></div><h1>ExceptionHandlerController.java</h1><pre class="source lang-java linenums">package com.richert.banking_app.controller;
+
+import com.richert.banking_app.dto.ErrorResponseDTO;
+import com.richert.banking_app.exception.BadRequestException;
+import com.richert.banking_app.exception.EntityNotFoundException;
+import com.richert.banking_app.exception.InvalidClientStatusException;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.*;
+import static org.springframework.http.HttpStatus.*;
+
+@RestControllerAdvice
+<span class="fc" id="L24">public class ExceptionHandlerController {</span>
+
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;NOT FOUND&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    schema = @Schema(implementation = ErrorResponseDTO.class))
+    })
+    public ErrorResponseDTO handleEntityNotFoundException(EntityNotFoundException ex) {
+<span class="nc" id="L33">        return buildErrorResponseDTO(ex, NOT_FOUND);</span>
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Validation Error&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    schema = @Schema(implementation = ErrorResponseDTO.class))
+    })
+    public ErrorResponseDTO handleValidationErrors(ConstraintViolationException e) {
+<span class="nc" id="L43">        Map&lt;String, List&lt;String&gt;&gt; errors = e.getConstraintViolations().stream()</span>
+<span class="nc" id="L44">                .collect(groupingBy(c -&gt; c.getPropertyPath().toString(),</span>
+<span class="nc" id="L45">                        mapping(ConstraintViolation::getMessageTemplate,</span>
+<span class="nc" id="L46">                                toList())));</span>
+
+<span class="nc" id="L48">        return ErrorResponseDTO.builder()</span>
+<span class="nc" id="L49">                .message(&quot;Input validation error&quot;)</span>
+<span class="nc" id="L50">                .status(BAD_REQUEST)</span>
+<span class="nc" id="L51">                .statusCode(BAD_REQUEST.value())</span>
+<span class="nc" id="L52">                .errors(errors)</span>
+<span class="nc" id="L53">                .build();</span>
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;BAD REQUEST&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    schema = @Schema(implementation = ErrorResponseDTO.class))
+    })
+    public ErrorResponseDTO handleBadRequestException(BadRequestException ex) {
+<span class="nc" id="L63">        return buildErrorResponseDTO(ex, BAD_REQUEST);</span>
+    }
+
+    @ResponseStatus(NOT_ACCEPTABLE)
+    @ExceptionHandler(InvalidClientStatusException.class)
+    @ApiResponse(responseCode = &quot;406&quot;, description = &quot;Wrong client status entered&quot;, content = {
+            @Content(mediaType = &quot;application/json&quot;,
+                    schema = @Schema(implementation = ErrorResponseDTO.class))
+    })
+    public ErrorResponseDTO handleInvalidTransactionTypeException(InvalidClientStatusException ex) {
+<span class="nc" id="L73">        return buildErrorResponseDTO(ex, NOT_ACCEPTABLE);</span>
+    }
+
+    private ErrorResponseDTO buildErrorResponseDTO(Exception ex, HttpStatus status) {
+<span class="nc" id="L77">        return ErrorResponseDTO.builder()</span>
+<span class="nc" id="L78">                .status(status)</span>
+<span class="nc" id="L79">                .message(ex.getMessage())</span>
+<span class="nc" id="L80">                .statusCode(status.value())</span>
+<span class="nc" id="L81">                .errors(ex.hashCode())</span>
+<span class="nc" id="L82">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
