@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -59,18 +59,18 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "client_id",
             referencedColumnName = "id")
     private Client client;
 
-    @OneToMany(cascade = ALL, mappedBy = "account", fetch = LAZY)
+    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "account", fetch = LAZY)
     private Set<Agreement> agreements = new LinkedHashSet<>();
 
-    @OneToMany(cascade = ALL, mappedBy = "debitAccount", fetch = LAZY)
+    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "debitAccount", fetch = LAZY)
     private Set<Transaction> debitTransactions = new LinkedHashSet<>();
 
-    @OneToMany(cascade = ALL, mappedBy = "creditAccount", fetch = LAZY)
+    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "creditAccount", fetch = LAZY)
     private Set<Transaction> creditTransactions = new LinkedHashSet<>();
 
     @Override

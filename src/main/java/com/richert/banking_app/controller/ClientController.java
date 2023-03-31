@@ -26,7 +26,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @ResponseStatus(OK)
-    @GetMapping("/status/{status}")
+    @GetMapping("/{status}")
     @Operation(summary = "Request for all clients by status", description = "Getting all clients with given status")
     @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
             @Content(mediaType = "application/json",

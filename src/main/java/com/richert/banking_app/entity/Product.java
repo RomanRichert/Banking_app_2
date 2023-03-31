@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -54,7 +55,7 @@ public class Product {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH}, fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;

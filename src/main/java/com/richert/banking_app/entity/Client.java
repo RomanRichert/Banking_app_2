@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -75,15 +75,15 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH}, fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(cascade = ALL, mappedBy = "client", fetch = LAZY)
+    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "client", fetch = LAZY)
     private Set<Account> accounts = new LinkedHashSet<>();
 
-    public void addAccount(Account account){
+    public void addAccount(Account account) {
         accounts.add(account);
     }
 
