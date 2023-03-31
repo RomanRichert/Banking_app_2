@@ -5,6 +5,7 @@ import com.richert.banking_app.entity.Agreement;
 import com.richert.banking_app.mapper.AgreementMapper;
 import com.richert.banking_app.mapper.AgreementMapperImpl;
 import com.richert.banking_app.repository.AgreementRepository;
+import com.richert.banking_app.util.EntityCreator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,5 +47,15 @@ class AgreementServiceImplTest {
         assertEquals(response, agreementService.getAgreementsByClientsId(any()), "Lists should be equals");
 
         verify(agreementRepository).findByAccountClientId(any());
+    }
+
+    @Test
+    @DisplayName("Tests getting all agreements")
+    void getAllAgreements() {
+        when(agreementRepository.findAll()).thenReturn(List.of(getAgreement()));
+
+        assertEquals(List.of(getAgreementDTO()), agreementService.getAllAgreements());
+
+        verify(agreementRepository).findAll();
     }
 }

@@ -21,4 +21,9 @@ public class AgreementServiceImpl implements AgreementService {
     public List<AgreementDTO> getAgreementsByClientsId(String id) {
         return agreementMapper.agreementsToAgreementDTOs(agreementRepository.findByAccountClientId(id));
     }
+
+    @Override
+    public List<AgreementDTO> getAllAgreements() {
+        return agreementMapper.agreementsToAgreementDTOs(agreementRepository.findAll());
+    }
 }

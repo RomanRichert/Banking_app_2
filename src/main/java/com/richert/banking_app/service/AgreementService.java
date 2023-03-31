@@ -7,4 +7,6 @@ import java.util.List;
 public interface AgreementService {
 
     List<AgreementDTO> getAgreementsByClientsId(String id);
+
+    List<AgreementDTO> getAllAgreements();
 }
