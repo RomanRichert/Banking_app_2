@@ -35,4 +35,15 @@ public class AgreementController {
     public List<AgreementDTO> findAgreementsWhereClientIdIs(@RequestParam String clientId) {
         return agreementService.getAgreementsByClientsId(clientId);
     }
+
+    @GetMapping("/all")
+    @ResponseStatus(OK)
+    @ApiResponse(responseCode = "200", description = "Successfully returned list of all agreements", content = {
+            @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = AgreementDTO.class)))
+    })
+    @Operation(summary = "Request for all agreements", description = "Getting all agreements")
+    public List<AgreementDTO> getAllAgreements() {
+        return agreementService.getAllAgreements();
+    }
 }

@@ -47,4 +47,14 @@ class AgreementServiceImplTest {
 
         verify(agreementRepository).findByAccountClientId(any());
     }
+
+    @Test
+    @DisplayName("Tests getting all agreements")
+    void getAllAgreements() {
+        when(agreementRepository.findAll()).thenReturn(List.of(getAgreement()));
+
+        assertEquals(List.of(getAgreementDTO()), agreementService.getAllAgreements());
+
+        verify(agreementRepository).findAll();
+    }
 }
