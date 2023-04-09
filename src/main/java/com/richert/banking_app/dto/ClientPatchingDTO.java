@@ -1,14 +1,13 @@
 package com.richert.banking_app.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 @Value
-public class ClientRequestDTO {
-
-    @NotBlank(message = "Tax code shouldn't be empty")
-    @Size(min = 1, max = 20, message = "Tax code should be between 1 and 20 characters")
-    String taxCode;
+public class ClientPatchingDTO {
 
     @NotBlank(message = "First name shouldn't be empty")
     @Size(min = 2, max = 50, message = "First name should be between 2 and 50 characters")
@@ -31,7 +30,4 @@ public class ClientRequestDTO {
     @Digits(message = "Phone number should consist of digits", integer = 15, fraction = 0)
     @Size(min = 1, max = 20, message = "Phone number should be between 1 and 20 characters")
     String phone;
-
-    @PositiveOrZero(message = "Managers id can't be negative")
-    int manager;
 }

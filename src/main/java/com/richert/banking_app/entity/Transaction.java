@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -42,12 +42,12 @@ public class Transaction {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @ManyToOne(cascade = ALL, fetch = LAZY)
+    @ManyToOne(cascade = {MERGE, PERSIST, REFRESH}, fetch = LAZY)
     @JoinColumn(name = "debit_account_id",
             referencedColumnName = "id")
     private Account debitAccount;
 
-    @ManyToOne(cascade = ALL, fetch = LAZY)
+    @ManyToOne(cascade = {MERGE, PERSIST, REFRESH}, fetch = LAZY)
     @JoinColumn(name = "credit_account_id",
             referencedColumnName = "id")
     private Account creditAccount;

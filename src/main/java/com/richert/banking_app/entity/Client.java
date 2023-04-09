@@ -2,9 +2,7 @@ package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.ClientStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -63,8 +61,9 @@ public class Client {
     @Size(min = 10, max = 80, message = "Address should be between 10 and 80 characters")
     @Column(name = "address")
     private String address;
-
+    
     @NotBlank(message = "Phone number shouldn't be empty")
+    @Digits(message = "Phone number should consist of digits", integer = 15, fraction = 0)
     @Size(min = 1, max = 20, message = "Phone number should be between 1 and 20 characters")
     @Column(name = "phone")
     private String phone;
@@ -75,12 +74,13 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @PositiveOrZero(message = "Managers id can't be negative")
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH}, fetch = LAZY)
     @JoinColumn(name = "manager_id",
             referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "client", fetch = LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "client", fetch = LAZY)
     private Set<Account> accounts = new LinkedHashSet<>();
 
     public void addAccount(Account account) {

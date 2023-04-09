@@ -1,8 +1,12 @@
 package com.richert.banking_app.service.util;
 
+import com.richert.banking_app.entity.Client;
 import com.richert.banking_app.entity.enums.ClientStatus;
+import com.richert.banking_app.exception.ClientNotFoundException;
 import com.richert.banking_app.exception.InvalidClientStatusException;
 import lombok.experimental.UtilityClass;
+
+import static com.richert.banking_app.entity.enums.ClientStatus.REMOVED;
 
 @UtilityClass
 public class RequestChecker {
@@ -15,5 +19,9 @@ public class RequestChecker {
         }
 
         throw new InvalidClientStatusException(status);
+    }
+
+    public static void checkIfClientIsDeleted(Client client){
+        if (client.getStatus() == REMOVED) throw new ClientNotFoundException(client.getId());
     }
 }

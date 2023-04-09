@@ -2,6 +2,7 @@ package com.richert.banking_app.service.impl;
 
 import com.richert.banking_app.dto.ClientResponseDTO;
 import com.richert.banking_app.entity.Client;
+import com.richert.banking_app.entity.enums.AccountStatus;
 import com.richert.banking_app.entity.enums.ClientStatus;
 import com.richert.banking_app.exception.InvalidClientStatusException;
 import com.richert.banking_app.mapper.ClientMapper;
@@ -60,10 +61,10 @@ class ClientServiceImplTest {
         List<ClientResponseDTO> response = List.of(getClientResponseDTO());
         List<Client> clients = List.of(getClient());
 
-        when(clientRepository.findByAccountsBalanceGreaterThan(any())).thenReturn(clients);
+        when(clientRepository.findByAccountsBalanceGreaterThan(any(), AccountStatus.REMOVED, ClientStatus.REMOVED)).thenReturn(clients);
 
         assertEquals(response, clientService.getAllClientsWhereBalanceMoreThan(anyDouble()), "Lists should be equals");
 
-        verify(clientRepository).findByAccountsBalanceGreaterThan(any());
+        verify(clientRepository).findByAccountsBalanceGreaterThan(any(), AccountStatus.REMOVED, ClientStatus.REMOVED);
     }
 }
