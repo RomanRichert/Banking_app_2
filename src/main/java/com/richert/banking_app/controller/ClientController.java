@@ -29,7 +29,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @ResponseStatus(OK)
-    @GetMapping("/{status}")
+    @GetMapping("all/{status}")
     @Operation(summary = "Request for all clients by status", description = "Getting all clients with given status")
     @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
             @Content(mediaType = "application/json",
@@ -40,7 +40,7 @@ public class ClientController {
     }
 
     @ResponseStatus(OK)
-    @GetMapping("/accounts")
+    @GetMapping("all/accounts")
     @Operation(summary = "Request for all clients with balance more than requested parameter", description = "Getting all clients where balance more than requested parameter")
     @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
             @Content(mediaType = "application/json",
@@ -72,7 +72,7 @@ public class ClientController {
         return clientService.getClientById(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ResponseStatus(OK)
     @Operation(summary = "Request for all clients", description = "Getting all clients")
     @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
@@ -81,6 +81,16 @@ public class ClientController {
     })
     public List<ClientResponseDTO> getAllClients(){
         return  clientService.getAllNotDeletedClients();
+    }
+    @GetMapping("/all/deleted")
+    @ResponseStatus(OK)
+    @Operation(summary = "Request for all deleted clients", description = "Getting all clients with ClientsStatus = REMOVED")
+    @ApiResponse(responseCode = "200", description = "Successfully returned list of clients", content = {
+            @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ClientResponseDTO.class)))
+    })
+    public List<ClientResponseDTO> getAllDeletedClients(){
+        return clientService.getAllDeletedClients();
     }
 
     @ResponseStatus(OK)

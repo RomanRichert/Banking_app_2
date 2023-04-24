@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 public interface AccountMapper {
 
     static String getId(Account account) {
-        return account.getId();
+        return account.getId().toString();
     }
 }

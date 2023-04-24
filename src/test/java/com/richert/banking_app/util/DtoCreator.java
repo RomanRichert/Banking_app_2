@@ -17,8 +17,9 @@ public class DtoCreator {
 
     public static ClientResponseDTO getClientResponseDTO() {
         Client client = getClient();
+
         return new ClientResponseDTO(
-                client.getId(),
+                client.getId().toString(),
                 client.getStatus().toString(),
                 client.getTaxCode(),
                 client.getFirstName(),
@@ -36,19 +37,21 @@ public class DtoCreator {
 
     public static AgreementDTO getAgreementDTO() {
         Agreement agreement = getAgreement();
+
         return new AgreementDTO(
                 agreement.getId(),
                 agreement.getStatus().toString(),
                 agreement.getInterestRate().toString(),
                 null,
                 null,
-                agreement.getAccount().getId(),
+                agreement.getAccount().getId().toString(),
                 agreement.getProduct().getName()
         );
     }
 
     public static ClientRequestDTO getClientRequestDTO() {
         Client client = getClient();
+
         return new ClientRequestDTO(
                 client.getTaxCode(),
                 client.getFirstName(),

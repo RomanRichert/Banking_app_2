@@ -21,4 +21,6 @@ public interface ClientService {
     void updateClient(ClientPatchingDTO clientPatchingDTO, String id);
 
     void deleteClient(String id);
+
+    List<ClientResponseDTO> getAllDeletedClients();
 }

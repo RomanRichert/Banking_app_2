@@ -1,10 +1,11 @@
 package com.richert.banking_app.entity;
 
 import com.richert.banking_app.entity.enums.Currency;
-import com.richert.banking_app.entity.enums.ProductStatus;
+import com.richert.banking_app.entity.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
 
@@ -37,7 +39,7 @@ public class Product {
 
     @Column(name = "status")
     @Enumerated(ORDINAL)
-    private ProductStatus status;
+    private Status status;
 
     @Enumerated(ORDINAL)
     @Column(name = "currency_code")
@@ -71,12 +73,5 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(name, manager, createdAt);
-    }
-
-    public Product(String name, ProductStatus status, Currency currency, int limit) {
-        this.name = name;
-        this.status = status;
-        this.currency = currency;
-        this.limit = limit;
     }
 }

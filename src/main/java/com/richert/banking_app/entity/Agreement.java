@@ -1,7 +1,8 @@
 package com.richert.banking_app.entity;
 
-import com.richert.banking_app.entity.enums.AccountProductStatus;
+import com.richert.banking_app.entity.enums.Status;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,8 +19,9 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Entity
-@Table(name = "agreements")
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "agreements")
 public class Agreement {
 
     @Id
@@ -29,7 +31,7 @@ public class Agreement {
 
     @Column(name = "status")
     @Enumerated(ORDINAL)
-    private AccountProductStatus status;
+    private Status status;
 
     @Column(name = "interest_rate")
     private BigDecimal interestRate;
@@ -61,12 +63,5 @@ public class Agreement {
     @Override
     public int hashCode() {
         return Objects.hash(id, createdAt, account, product);
-    }
-
-    public Agreement(AccountProductStatus status, BigDecimal interestRate, Account account, Product product) {
-        this.status = status;
-        this.interestRate = interestRate;
-        this.account = account;
-        this.product = product;
     }
 }

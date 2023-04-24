@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-seq-for-uuid-generator
+      author: Roman Richert
+      changes:
+        - createSequence:
+            sequenceName: seq_for_uuid_generator

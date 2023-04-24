@@ -1,27 +1,29 @@
 package com.richert.banking_app.service.util;
 
 import com.richert.banking_app.entity.Client;
-import com.richert.banking_app.entity.enums.ClientStatus;
+import com.richert.banking_app.entity.enums.Status;
 import com.richert.banking_app.exception.ClientNotFoundException;
 import com.richert.banking_app.exception.InvalidClientStatusException;
 import lombok.experimental.UtilityClass;
 
-import static com.richert.banking_app.entity.enums.ClientStatus.REMOVED;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static com.richert.banking_app.entity.enums.Status.REMOVED;
 
 @UtilityClass
 public class RequestChecker {
 
     public static void checkClientStatus(String status) {
-        if (status != null && !status.isBlank()) {
-            for (ClientStatus cs : ClientStatus.values()) {
-                if (status.equals(cs.name())) return;
-            }
-        }
-
-        throw new InvalidClientStatusException(status);
+        if (!Stream.of((Status.values())).map(Objects::toString).toList().contains(status))
+            throw new InvalidClientStatusException(status);
     }
 
-    public static void checkIfClientIsDeleted(Client client){
-        if (client.getStatus() == REMOVED) throw new ClientNotFoundException(client.getId());
+    public static void checkIfClientIsDeleted(Client client) {
+        if (client.getStatus() == REMOVED) throw new ClientNotFoundException(client.getId().toString());
+    }
+
+    public static boolean checkIfStringIsNullOrBlank(String string) {
+        return string != null && !string.isBlank();
     }
 }

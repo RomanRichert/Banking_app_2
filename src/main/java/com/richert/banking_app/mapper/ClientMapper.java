@@ -22,6 +22,7 @@ public interface ClientMapper {
 
     @Mapping(target = "manager", ignore = true)
     @Mapping(target = "createdAt", expression = "java(new Timestamp(System.currentTimeMillis()))")
+    @Mapping(target = "updatedAt", expression = "java(new Timestamp(System.currentTimeMillis()))")
     Client toEntity(ClientRequestDTO clientRequestDTO, @Context ManagerRepository managerRepository);
 
     List<ClientResponseDTO> clientsToClientDTOs(List<Client> clients);

@@ -1,8 +1,7 @@
 package com.richert.banking_app.repository;
 
 import com.richert.banking_app.entity.Client;
-import com.richert.banking_app.entity.enums.AccountStatus;
-import com.richert.banking_app.entity.enums.ClientStatus;
+import com.richert.banking_app.entity.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,13 +19,14 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
     @Transactional
     @Modifying
     @Query("update Client c set c.status = ?1 where c.id = ?2")
-    void updateStatusById(@NonNull ClientStatus status, String id);
-    List<Client> findByStatusNot(ClientStatus status);
+    void updateStatusById(@NonNull Status status, UUID id);
+
+    List<Client> findByStatusNot(Status status);
 
     @Query("""
             select c from Client c inner join c.accounts accounts
             where accounts.balance > ?1 and accounts.status <> ?2 and c.status <> ?3""")
-    List<Client> findByAccountsBalanceGreaterThan(BigDecimal balance, AccountStatus status, ClientStatus status1);
+    List<Client> findByAccountsBalanceGreaterThan(BigDecimal balance, Status status, Status status1);
 
     @Transactional
     @Modifying
@@ -35,5 +35,5 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
             where c.id = ?7""")
     void updateClientById(String firstName, String lastName, String email, String address, String phone, Timestamp updatedAt, UUID id);
 
-    List<Client> findByStatus(ClientStatus status);
+    List<Client> findByStatus(Status status);
 }

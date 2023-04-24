@@ -4,8 +4,7 @@ import com.richert.banking_app.dto.ClientPatchingDTO;
 import com.richert.banking_app.dto.ClientRequestDTO;
 import com.richert.banking_app.dto.ClientResponseDTO;
 import com.richert.banking_app.entity.Client;
-import com.richert.banking_app.entity.enums.AccountStatus;
-import com.richert.banking_app.entity.enums.ClientStatus;
+import com.richert.banking_app.entity.enums.Status;
 import com.richert.banking_app.exception.ClientNotFoundException;
 import com.richert.banking_app.mapper.ClientMapper;
 import com.richert.banking_app.repository.ClientRepository;
@@ -20,8 +19,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import static com.richert.banking_app.service.util.RequestChecker.checkClientStatus;
-import static com.richert.banking_app.service.util.RequestChecker.checkIfClientIsDeleted;
+import static com.richert.banking_app.entity.enums.Status.ACTIVE;
+import static com.richert.banking_app.entity.enums.Status.REMOVED;
+import static com.richert.banking_app.service.util.RequestChecker.*;
 import static java.lang.System.currentTimeMillis;
 
 @Service
@@ -39,18 +39,21 @@ public class ClientServiceImpl implements ClientService {
         String status = clientStatus.toUpperCase();
         checkClientStatus(status);
 
-        return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(ClientStatus.valueOf(status)));
+        return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(Status.valueOf(status)));
     }
 
     @Override
     public List<ClientResponseDTO> getAllClientsWhereBalanceMoreThan(double amount) {
-        return clientMapper.clientsToClientDTOs(clientRepository.findByAccountsBalanceGreaterThan(BigDecimal.valueOf(amount), AccountStatus.REMOVED, ClientStatus.REMOVED));
+        return clientMapper.clientsToClientDTOs(clientRepository.findByAccountsBalanceGreaterThan(BigDecimal.valueOf(amount), REMOVED, REMOVED));
     }
 
     @Override
     @Transactional
     public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
-        return clientMapper.toDTO(clientRepository.save(clientMapper.toEntity(clientRequestDTO, managerRepository)));
+        Client client = clientMapper.toEntity(clientRequestDTO, managerRepository);
+        client.setStatus(ACTIVE);
+
+        return clientMapper.toDTO(clientRepository.save(client));
     }
 
     @Override
@@ -63,7 +66,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientResponseDTO> getAllNotDeletedClients() {
-        return clientMapper.clientsToClientDTOs(clientRepository.findByStatusNot(ClientStatus.REMOVED));
+        return clientMapper.clientsToClientDTOs(clientRepository.findByStatusNot(REMOVED));
     }
 
     @Override
@@ -72,23 +75,23 @@ public class ClientServiceImpl implements ClientService {
         Client patchedClient = clientRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ClientNotFoundException(id));
         checkIfClientIsDeleted(patchedClient);
 
-        if (clientPatchingDTO.getFirstName() != null && !clientPatchingDTO.getFirstName().isBlank()){
+        if (checkIfStringIsNullOrBlank(clientPatchingDTO.getFirstName())){
             patchedClient.setFirstName(clientPatchingDTO.getFirstName());
         }
 
-        if (clientPatchingDTO.getLastName() != null && !clientPatchingDTO.getLastName().isBlank()){
+        if (checkIfStringIsNullOrBlank(clientPatchingDTO.getLastName())){
             patchedClient.setLastName(clientPatchingDTO.getLastName());
         }
 
-        if (clientPatchingDTO.getEmail() != null && !clientPatchingDTO.getEmail().isBlank()){
+        if (checkIfStringIsNullOrBlank(clientPatchingDTO.getEmail())){
             patchedClient.setEmail(clientPatchingDTO.getEmail());
         }
 
-        if (clientPatchingDTO.getAddress() != null && !clientPatchingDTO.getAddress().isBlank()){
+        if (checkIfStringIsNullOrBlank(clientPatchingDTO.getAddress())){
             patchedClient.setAddress(clientPatchingDTO.getAddress());
         }
 
-        if (clientPatchingDTO.getPhone() != null && !clientPatchingDTO.getPhone().isBlank()){
+        if (checkIfStringIsNullOrBlank(clientPatchingDTO.getPhone())){
             patchedClient.setPhone(clientPatchingDTO.getPhone());
         }
 
@@ -106,7 +109,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClient(String id) {
-        clientRepository.updateStatusById(ClientStatus.REMOVED, id);
+        clientRepository.updateStatusById(REMOVED, UUID.fromString(id));
+    }
+
+    @Override
+    public List<ClientResponseDTO> getAllDeletedClients() {
+        return clientMapper.clientsToClientDTOs(clientRepository.findByStatus(REMOVED));
     }
 }
