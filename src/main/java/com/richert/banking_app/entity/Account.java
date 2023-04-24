@@ -1,14 +1,11 @@
 package com.richert.banking_app.entity;
 
-import com.richert.banking_app.entity.enums.AccountStatus;
-import com.richert.banking_app.entity.enums.AccountType;
+import com.richert.banking_app.entity.enums.Status;
 import com.richert.banking_app.entity.enums.Currency;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
@@ -16,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
@@ -24,8 +22,9 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @Entity
-@Table(name = "accounts")
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "accounts")
 public class Account {
 
     @Id
@@ -33,19 +32,16 @@ public class Account {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",
             strategy = "com.richert.banking_app.generator.UuidTimeSequenceGenerator")
-    private String id;
+    private UUID id;
 
     @NotBlank(message = "Name shouldn't be empty")
     @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     @Column(name = "name")
     private String name;
 
-    @Column(name = "type")
-    private AccountType type;
-
     @Column(name = "status")
     @Enumerated(ORDINAL)
-    private AccountStatus status;
+    private Status status;
 
     @Column(name = "balance")
     private BigDecimal balance;
@@ -73,6 +69,18 @@ public class Account {
     @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "creditAccount", fetch = LAZY)
     private Set<Transaction> creditTransactions = new LinkedHashSet<>();
 
+    public void addAgreement(Agreement agreement){
+        agreements.add(agreement);
+    }
+
+    public void addDebitTransaction(Transaction transaction){
+        debitTransactions.add(transaction);
+    }
+
+    public void addCreditTransaction(Transaction transaction){
+        creditTransactions.add(transaction);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,13 +92,5 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(id, createdAt, client);
-    }
-
-    public Account(String name, AccountType type, AccountStatus status, Currency currency, Client client) {
-        this.name = name;
-        this.type = type;
-        this.status = status;
-        this.currency = currency;
-        this.client = client;
     }
 }

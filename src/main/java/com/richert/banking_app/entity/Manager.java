@@ -1,13 +1,10 @@
 package com.richert.banking_app.entity;
 
-import com.richert.banking_app.entity.enums.ManagerStatus;
+import com.richert.banking_app.entity.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -20,6 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "managers")
 public class Manager {
 
@@ -40,7 +38,7 @@ public class Manager {
 
     @Enumerated(ORDINAL)
     @Column(name = "status")
-    private ManagerStatus status;
+    private Status status;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -59,11 +57,5 @@ public class Manager {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, createdAt, id);
-    }
-
-    public Manager(String firstName, String lastName, ManagerStatus status) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.status = status;
     }
 }

@@ -5,12 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum AccountType {
-
-    NEW(0),
-    CREDIT(1),
-    DEPOSIT(2),
-    CURRENT(3);
-
-    private final int value;
+public enum Status {
+    PENDING,
+    ACTIVE,
+    BLOCKED,
+    REMOVED
 }

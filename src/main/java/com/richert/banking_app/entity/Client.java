@@ -1,19 +1,19 @@
 package com.richert.banking_app.entity;
 
-import com.richert.banking_app.entity.enums.ClientStatus;
+import com.richert.banking_app.entity.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.ORDINAL;
@@ -23,6 +23,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "clients")
 public class Client {
 
@@ -31,11 +32,11 @@ public class Client {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",
             strategy = "com.richert.banking_app.generator.UuidTimeSequenceGenerator")
-    private String id;
+    private UUID id;
 
-    @Column(name = "status")
     @Enumerated(ORDINAL)
-    private ClientStatus status;
+    @Column(name = "status")
+    private Status status;
 
     @NotBlank(message = "Tax code shouldn't be empty")
     @Size(min = 1, max = 20, message = "Tax code should be between 1 and 20 characters")
@@ -52,7 +53,6 @@ public class Client {
     @Column(name = "last_name")
     private String lastName;
 
-
     @Email(message = "Invalid email")
     @NotBlank(message = "Email shouldn't be empty")
     @Size(max = 60, message = "Max size of the email is 60 characters")
@@ -63,8 +63,9 @@ public class Client {
     @Size(min = 10, max = 80, message = "Address should be between 10 and 80 characters")
     @Column(name = "address")
     private String address;
-
+    
     @NotBlank(message = "Phone number shouldn't be empty")
+    @Digits(message = "Phone number should consist of digits", integer = 15, fraction = 0)
     @Size(min = 1, max = 20, message = "Phone number should be between 1 and 20 characters")
     @Column(name = "phone")
     private String phone;
@@ -76,14 +77,13 @@ public class Client {
     private Timestamp updatedAt;
 
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH}, fetch = LAZY)
-    @JoinColumn(name = "manager_id",
-            referencedColumnName = "id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(cascade = {PERSIST, MERGE, REFRESH}, mappedBy = "client", fetch = LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "client", fetch = LAZY)
     private Set<Account> accounts = new LinkedHashSet<>();
 
-    public void addAccount(Account account) {
+    public void addAccount(Account account){
         accounts.add(account);
     }
 
@@ -98,16 +98,5 @@ public class Client {
     @Override
     public int hashCode() {
         return Objects.hash(id, email);
-    }
-
-    public Client(ClientStatus status, String taxCode, String firstName, String lastName, String email, String address, String phone, Manager manager) {
-        this.status = status;
-        this.taxCode = taxCode;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.phone = phone;
-        this.manager = manager;
     }
 }

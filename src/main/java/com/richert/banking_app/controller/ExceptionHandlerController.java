@@ -63,14 +63,24 @@ public class ExceptionHandlerController {
         return buildErrorResponseDTO(ex, BAD_REQUEST);
     }
 
-    @ResponseStatus(NOT_ACCEPTABLE)
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = {
+            @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponseDTO.class))
+    })
+    public ErrorResponseDTO handleIllegalArgumentException(IllegalArgumentException ex) {
+        return buildErrorResponseDTO(ex, BAD_REQUEST);
+    }
+
+    @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidClientStatusException.class)
     @ApiResponse(responseCode = "406", description = "Wrong client status entered", content = {
             @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponseDTO.class))
     })
     public ErrorResponseDTO handleInvalidTransactionTypeException(InvalidClientStatusException ex) {
-        return buildErrorResponseDTO(ex, NOT_ACCEPTABLE);
+        return buildErrorResponseDTO(ex, BAD_REQUEST);
     }
 
     private ErrorResponseDTO buildErrorResponseDTO(Exception ex, HttpStatus status) {

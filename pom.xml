@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>3.0.3</version>
+            <version>3.0.5</version>
         </dependency>
 
         <dependency>
@@ -155,6 +155,19 @@
             <version>3.0.2</version>
         </dependency>
 
+        <!--        prometheus-->
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>1.10.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -217,7 +230,7 @@
                         <exclude>com/**/exception/**</exclude>
                         <exclude>com/**/BankingAppApplication.class</exclude>
                     </excludes>
-                    <outputDirectory>target/coverage-reports/</outputDirectory>
+                    <outputDirectory>target/site/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

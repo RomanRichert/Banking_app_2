@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changes/v0.0.1-SNAPSHOT/60-create-transactions-table.yaml
   - include:
       file: db/changelog/changes/v0.0.1-SNAPSHOT/70-insert-test-data.sql
+  - include:
+      file: db/changelog/changes/v0.0.1-SNAPSHOT/80-create-seq-for-uuid-generator.yaml
